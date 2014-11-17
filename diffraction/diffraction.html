@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Patron de diffraction</title>
+    <style>
+        body {
+            color: #333;
+            font: 16px sans-serif;
+            margin: 0;
+        }
+        
+        .container {
+            margin: 0 auto;
+            width: 1070px;
+            padding: 0 20px;
+        }
+
+        .controls-left {
+            border-right: 2px solid #eee;
+            float: left;
+            margin: 10px 40px 30px;
+            padding: 0 55px 0 0;
+            width: 400px;
+        }
+
+        .controls-right {
+            float: left;
+            margin: 10px 20px 30px;
+            width: 400px;
+        }
+
+        .slider {
+            float: right;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #666;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            fill: #333;
+        }
+
+        .patternarea {
+            fill: lightsteelblue;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .diffractionline {
+            fill: none;
+            stroke: #ff7f0e;
+            stroke-width: 1.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls-left">
+            <p>
+                <span id="wavelengthinfo">
+                    Longueur d'onde
+                </span>
+                <input class="slider" id="wavelengthSlider" type="range"
+                    min="450" max="700" step="10" value="650" 
+                    oninput="wavelengthChanged()" />
+                <span class="slider"><span id="wavelength">650</span> nm</span>
+            </p>
+            <p>
+                <span id="slitwidthinfo">
+                    Largeur des fentes
+                </span>
+                <input class="slider" id="slitWidthSlider" type="range"
+                    min="10" max="500" step="10" value="100" 
+                    oninput="widthChanged()" />
+                <span class="slider"><span id="slitwidth">100</span> μm</span>
+            </p>
+
+            <p>
+                <span id="slitsepinfo">
+                    Distance entre les fentes
+                </span>
+                <input class="slider" id="slitSepSlider" type="range"
+                    min="50" max="1000" step="10" value="200"
+                    oninput="distanceChanged()" />
+                <span class="slider"><span id="slitsep">200</span> μm</span>
+            </p>
+        </div>
+        <div class="controls-right">
+            <p>
+                <span id="numberslitsinfo">
+                    Nombre de fentes
+                </span>
+                <input class="slider" id="numberSlitsSlider" type="range"
+                    min="1" max="6" step="1" value="2" 
+                    oninput="numberSlitsChanged()" />
+                <span class="slider"><span id="numberslits">2</span></span>
+            </p>
+        </div>
+
+        <div id="viscontainer" width="1030" height="550"></div>
+    </div>
+
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="diffraction.js"></script>
+</body>

@@ -1,0 +1,103 @@
+@import url(http://fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700);
+@import url(http://fonts.googleapis.com/css?family=Quintessential);
+
+body {
+    font-family: Alegreya;
+    color: #333;
+    font-size: 20px;
+    width: 600px;
+    margin: 10px auto;
+    background-color: #f8ecc2;
+}
+
+h1 {
+    font-family: Quintessential;
+    font-size: 3rem;
+    text-align: center;
+    color: #800000;
+}
+
+.figure {
+    background-color: white;
+    margin: 0 auto 20px auto;
+    padding: 10px;
+    position: relative;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+	-o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+	-webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.figure>img {
+    display: block;
+    position: absolute;
+}
+
+#trailcanvas {
+    position: absolute;
+}
+
+#thecanvas {
+    position: relative;
+}
+
+.centered {
+    text-align: center;
+}
+
+#speedslider {
+    margin-left: 40px;
+}
+
+#speedreadout {
+    width: 2.3em;
+    display: inline-block;
+    text-align: right;
+}
+
+.customButton {  /* style a link as a push-button */
+    display: inline-block; 
+    width: 60px; 
+    height: 24px; 
+    line-height: 24px; 
+    font-size: 15px; 
+    font-family: sans-serif; 
+    text-align: center;
+    color: black; 
+    background: -webkit-linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
+    background: linear-gradient(white,#eeeeee,#eeeeee,#e0e0e0);
+    text-decoration: none; 
+    border: 1px solid gray; 
+    border-radius: 5px;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.customButton:active {
+    background: -webkit-linear-gradient(#909090,#808080,#808080,#707070);
+    background: linear-gradient(#909090,#808080,#808080,#707070);
+}
+
+input[type="range"] {
+    width: 140px;
+    padding: 0px;
+}
+input[type="range"]::-ms-tooltip {
+    display: none;       /* hide readout in IE */
+}
+input[type="range"]::-ms-track {
+    color: transparent;  /* hide tick marks in IE */
+}	
+
+input {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  -ms-user-select: none;
+  user-select: none;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+    <title>Newton's Cannon</title>
+    
+    <link rel="stylesheet" href="newton.css">
+        
+</head>
+
+<body>
+    <h1>Newton's Cannon</h1>
+
+    <div class="figure" style="width: 500px; height: 500px;">
+        <img src="newtondrawing.jpg" width="500" height="500" 
+             alt="Netwon's illustration of the cannon" />
+
+        <canvas id="trailcanvas" width="500" height="500">
+            Canvas not supported, please use an up to date modern web browser.
+        </canvas>
+
+        <canvas id="thecanvas" width="500" height="500">
+            Canvas not supported, please use an up to date modern web browser.
+        </canvas>
+    </div>
+
+
+    <div class="centered">
+        <!--<input type="button" value="Fire!" onclick="fireProjectile();" />-->
+        <a class="customButton" href="javascript:void(0)" 
+            onclick="fireProjectile();" ontouchstart="">Fire!</a>
+        <a class="customButton" href="javascript:void(0)" 
+            onclick="clearFigure();" ontouchstart="">Clear!</a>
+        <input id="speedslider" type="range"
+               min="0" max="8000" step="100" value="3000"
+               oninput="showSpeed();" onchange="showSpeed();" />
+        Initial speed = <span id="speedreadout">3000</span> m/s
+    </div>
+
+    <p>This simulation is based on Isaac Newton's famous thought experiment and
+    illustration of firing a projectile from a high mountaintop at various
+    speeds as described in <a
+    href="http://books.google.com/books?id=DXE9AAAAcAAJ">A Treatise of the
+    System of the World</a>.</p>
+
+
+    <script src="newton.js"></script>
+</body>
+
+</html>
