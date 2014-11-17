@@ -1,0 +1,3 @@
+[submodule "phaseslune"]
+	path = phaseslune
+	url = https://github.com/loicseguin/phaseslune.git
