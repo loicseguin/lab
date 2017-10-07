@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Simulation d'une radiographie</title>
+    <style>
+      body {
+        color: #333;
+        font: 16px sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      
+      #informations {
+        background-color: #ddd;
+        width: 500px;
+        margin: 0;
+        padding: 0;
+        float: left;
+      }
+
+      #figures {
+        background-color: rgb(235, 235, 235);
+        width: 500px;
+        margin: 0;
+        padding: 0;
+        float: left;
+      }
+
+      .container {
+        margin: 0 auto;
+        width: 1040px;
+        padding: 0 20px;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #666;
+        shape-rendering: crispEdges;
+      }
+
+      .axis text {
+        fill: #333;
+      }
+
+      .line {
+        fill: none;
+        stroke: #ff7f0e;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Simulation d'une radiographie</h1>
+      <div id='figures'>
+      </div>
+      <script src="http://d3js.org/d3.v3.min.js"></script>
+      <script src="plot.js"></script>
+      <script src="xray.js"></script>
+    </div>
+  </body>
+</html>
