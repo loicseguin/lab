@@ -50,6 +50,12 @@
         stroke: #ff7f0e;
         stroke-width: 1.5px;
       }
+
+      .grid path,
+      .grid line {
+        stroke: #fff;
+        opacity: 0.7;
+      }
     </style>
   </head>
   <body>
@@ -57,8 +63,6 @@
       <h1>Simulation d'une radiographie</h1>
       <div id='figures'>
         <button id="addplot">Add plot</button>
-        <button id="changedomain">Change domain</button>
-        <button id="addfigure">Add figure</button>
         <br>
       </div>
       <script src="http://d3js.org/d3.v4.js"></script>
