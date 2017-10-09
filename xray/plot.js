@@ -15,8 +15,7 @@ function lineChart() {
         colors = d3.scaleOrdinal(d3.schemeCategory10),
         g = null,
         x_axis_title = "",
-        y_axis_title = "",
-        nlines = 0;
+        y_axis_title = "";
 
     function plot(selection) {
 
@@ -67,12 +66,13 @@ function lineChart() {
             var line = d3.line()
                 .x(function (d) { return xScale(d[0]); })
                 .y(function (d) { return yScale(d[1]); });
+            var nlines = svg.selectAll(".line").size();
             g.append("path")
                 .datum(data)
                 .attr("class", "line")
+                .attr("id", "line" + nlines)
                 .attr("d", line)
                 .style("stroke", function() { return colors(nlines); });
-            nlines++;
 
             // Create grid lines.
             var duration = 0;

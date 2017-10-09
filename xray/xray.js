@@ -84,11 +84,23 @@ d3.select("#addplot").on("click", function() {
             .data([datas[nplots]])
             .call(plot0);
         nplots++;
+        d3.select("#delplot").attr("disabled", null);
     }
     if (nplots >= datas.length) {
         d3.select(this).attr("disabled", "disabled");
     }
 });
+
+d3.select("#delplot")
+    .on("click", function() {
+        nplots--;
+        d3.select(".line#line" + nplots).remove()
+        d3.select("#addplot").attr("disabled", null);
+
+        if (nplots <= 0) {
+            d3.select(this).attr("disabled", "disabled");
+        }
+    });
 
 
 var photonEnergy = d3.range(0, 50, 0.1);
