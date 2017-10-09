@@ -15,13 +15,17 @@ function lineChart() {
         colors = d3.scaleOrdinal(d3.schemeCategory10),
         g = null,
         x_axis_title = "",
-        y_axis_title = "";
+        y_axis_title = "",
+        zoom = d3.zoom()
+            .scaleExtent([0.5, 10])
+            .on("zoom", zoomed);
 
     function plot(selection) {
 
         selection.each(function(data) {
 
             // Update the x scale
+            // Always make sure that the new data can be fully shown.
             var domain = [
                 d3.min([xScale.domain()[0], d3.min(data, function(d) { return d[0]; })]),
                 d3.max([xScale.domain()[1], d3.max(data, function(d) { return d[0]; })])
@@ -31,6 +35,7 @@ function lineChart() {
                 .range([0, width]);
 
             // Update the y scale
+            // Always make sure that the new data can be fully shown.
             domain = [
                 d3.min([yScale.domain()[0], d3.min(data, function(d) { return d[1]; })]),
                 d3.max([yScale.domain()[1], d3.max(data, function(d) { return d[1]; })])
@@ -41,7 +46,7 @@ function lineChart() {
 
             // Select the svg element if it exists.
             var svg = d3.select(this).selectAll("svg").data([data]);
-            var svgEnter = svg.enter().append("svg");
+            var svgEnter = svg.enter().append("svg").call(zoom);
 
             // Otherwise create skeletal graph.
             var gEnter = svgEnter.append("g");
@@ -49,6 +54,19 @@ function lineChart() {
             gEnter.append("g").attr("class", "y grid");
             gEnter.append("g").attr("class", "x axis");
             gEnter.append("g").attr("class", "y axis");
+            // For clipping to work, the area to be clipped has to be contained
+            // within a "g" element. Add such an element to represent the chart
+            // area and then add another one to contain all the lines.
+            gEnter.append("g")
+                .attr("class", "chartarea")
+                .attr("clip-path", "url(#clip)")
+                .append("g")
+                .attr("class", "charts");
+            gEnter.append("clipPath")
+                .attr("id", "clip")
+                .append("rect")
+                .attr("width", width)
+                .attr("height", height);
 
             // Update outer dimensions, ie, dimensions of the svg element.
             svg = svg.merge(svgEnter);
@@ -67,7 +85,8 @@ function lineChart() {
                 .x(function (d) { return xScale(d[0]); })
                 .y(function (d) { return yScale(d[1]); });
             var nlines = svg.selectAll(".line").size();
-            g.append("path")
+            g.select(".charts")
+                .append("path")
                 .datum(data)
                 .attr("class", "line")
                 .attr("id", "line" + nlines)
@@ -75,6 +94,8 @@ function lineChart() {
                 .style("stroke", function() { return colors(nlines); });
 
             // Create grid lines.
+            // Animate only if there is already a line so that there is no
+            // animation when the page first loads.
             var duration = 0;
             if (nlines > 1) { duration = 1000; }
             g.select(".x.grid")
@@ -127,6 +148,7 @@ function lineChart() {
     }
 
     function updateLines() {
+        // Redraw all lines to fit new scale.
         g.selectAll(".line").each(function (d, i) {
             var line = d3.line()
                 .x(function (d) { return xScale(d[0]); })
@@ -138,7 +160,23 @@ function lineChart() {
         });
     }
 
+    function zoomed() {
+        // When a zoom event occurs, zoom the lines and update the scales.
+        g.selectAll(".charts")
+            .attr("transform", d3.event.transform);
+        g.selectAll(".line").style("stroke-width", 2 / d3.event.transform.k);
+        g.select(".x.axis")
+            .call(xAxis.scale(d3.event.transform.rescaleX(xScale)));
+        g.select(".x.grid")
+            .call(xGrid.scale(d3.event.transform.rescaleX(xScale)));
+        g.select(".y.axis")
+            .call(yAxis.scale(d3.event.transform.rescaleY(yScale)));
+        g.select(".y.grid")
+            .call(yGrid.scale(d3.event.transform.rescaleY(yScale)));
+    }
+
     plot.xdomain = function(domain) {
+        // Get/set domain for x scale.
         if (!arguments.length) {
             return xScale.domain();
         }
@@ -154,6 +192,7 @@ function lineChart() {
     };
 
     plot.ydomain = function(domain) {
+        // Get/set domain for y scale.
         if (!arguments.length) {
             return yScale.domain();
         }
@@ -169,6 +208,8 @@ function lineChart() {
     };
 
     plot.update = function(data) {
+        // Change data for a line. This function should only be used if the
+        // chart contains a single line.
         g.select(".line")
             .datum(data)
             .attr("d", d3.line()
@@ -177,6 +218,7 @@ function lineChart() {
     };
 
     plot.xAxisLabel = function(val) {
+        // Get/set label for x axis.
         if (!arguments.length) {
             return x_axis_title;
         }
@@ -185,6 +227,7 @@ function lineChart() {
     };
 
     plot.yAxisLabel = function(val) {
+        // Get/set label for y axis.
         if (!arguments.length) {
             return y_axis_title;
         }
