@@ -261,6 +261,10 @@ function greyscaleDrawing() {
 
             var binwidth = width / data.length;
 
+            function color(d) {
+                var rgb = Math.round(d);
+                return "rgb(" + rgb + "," + rgb + "," + rgb + ")";
+            }
             // Enter
             svg.selectAll("rect")
                 .data(DOs)
@@ -270,20 +274,16 @@ function greyscaleDrawing() {
                 .attr("y", 0)
                 .attr("width", binwidth)
                 .attr("height", height)
-                .attr("fill", function(d, i) {
-                    return "rgb(" + d + ", " + d + ", " + d + ")"; })
-                .attr("stroke", function(d, i) {
-                    return "rgb(" + d + ", " + d + ", " + d + ")"; });
+                .attr("fill", function(d, i) { return color(d); })
+                .attr("stroke", function(d, i) { return color(d); });
 
             // Update
             svg.selectAll("rect")
                 .data(DOs)
                 .attr("x", function(d, i) { return i * binwidth; })
                 .attr("width", binwidth)
-                .attr("fill", function(d, i) {
-                    return "rgb(" + d + ", " + d + ", " + d + ")"; })
-                .attr("stroke", function(d, i) {
-                    return "rgb(" + d + ", " + d + ", " + d + ")"; });
+                .attr("fill", function(d, i) { return color(d); })
+                .attr("stroke", function(d, i) { return color(d); });
 
         });
     }
