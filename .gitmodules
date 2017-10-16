@@ -1,3 +1,6 @@
 [submodule "phaseslune"]
 	path = phaseslune
 	url = https://github.com/loicseguin/phaseslune.git
+[submodule "xray"]
+	path = xray
+	url = https://github.com/loicseguin/emxray.git
