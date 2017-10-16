@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Simulation d'une radiographie – Partie C</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="informations">
+      <h1>Simulation d'une radiographie</h1>
+      <h2>Partie C – Effet talon</h2>
+      <p><a href="partb.html">« Partie B</a> <a href="partd.html">Partie D »</a>
+      <p>
+      Supposons que la différence de potentiel entre les bornes du tube a
+      rayons X est de 80,0 kV. La figure du haut illustre l'allure de la
+      radiographie produite alors qu'aucun patient n'est radiographié. La
+      figure du bas illustre deux spectres : sans effet talon et avec effet
+      talon. Il devrait en fait y avoir une infinité de spectres différents en
+      raison de l'effet talon. Un seul d'entre eux a été illustré pour donner
+      l'idée de ce qui se passe.
+      </p>
+      <p>
+      L'effet talon est principalement influencé par trois facteurs : la
+      profondeur de pénétration des électrons de bombardement dans l'anode,
+      l'angle de l'anode et le gamma du récepteur des rayons X.
+      </p>
+      </div>
+      <div id="figures">
+        <div id="figure1">
+          <h4>Radiographie faite sans patient</h4>
+        </div>
+        <div id="figure2">
+          <h4>Spectre d'émission de rayons X</h4>
+        </div>
+        <div id="controls">
+          <p>
+            <input id="depth" type="range" min="0" max="10"
+              style="width: 120px;">
+            Pénétration dans l'anode : <span id="depthValue"></span>
+            <br>
+            <input id="angle" type="range" min="16" max="50"
+              style="width: 120px;">
+            Angle de l'anode : <span id="angleValue"></span>
+            <br>
+            <input id="gamma" type="range" min="0.5" max="5" step="0.1"
+              style="width: 120px;">
+            Gamma : <span id="gammaValue"></span>
+          </p>
+        </div>
+      </div>
+      <script src="http://d3js.org/d3.v4.min.js"></script>
+      <script src="plot.js"></script>
+      <script src="xray.js"></script>
+      <script src="filtration.js"></script>
+      <script src="attenuationcoeff.js"></script>
+      <script>
+var plot = lineChart()
+  .xAxisLabel("Énergie des photons (keV)")
+  .yAxisLabel("Nombre de photons (x 10¹⁴)");
+
+var draw = greyscaleDrawing();
+
+var defaultDepth = 3;  // in µm
+var defaultAngle = 30;  // in degrees
+var defaultGamma = 3.0;
+var photonEnergy = d3.range(0, 80, 0.1);
+var spec = genSpectrum(photonEnergy, 1.5, 0.02, 0.01);
+
+var anodeFiltered = anodeFiltration(spec, defaultDepth * 1e-6,
+  defaultAngle * Math.PI / 180);
+var specAnode = anodeFiltered[0];
+var energiesAnode = anodeFiltered[1];
+var DOs = getDOs(energiesAnode, 3.0, defaultGamma);
+
+var depth = defaultDepth * 1e-6;
+var angle = defaultAngle * Math.PI / 180;
+var gamma = defaultGamma;
+
+d3.select("#figure1")
+  .data([DOs])
+  .call(draw);
+
+d3.select("#figure2")
+  .data([spec])
+  .call(plot);
+d3.select("#figure2")
+  .data([specAnode])
+  .call(plot);
+
+d3.select("#depthValue")
+  .html(defaultDepth + " µm");
+d3.select("#depth")
+  .attr("value", defaultDepth)
+  .on("input", function() {
+      depth = +this.value / 1e6;
+      var data = anodeFiltration(spec, depth, angle);
+      plot.update(data[0], "#line1");
+      DOs = getDOs(data[1], 3.0, gamma);
+      d3.select("#figure1")
+        .data([DOs])
+        .call(draw);
+      d3.select("#depthValue")
+        .html(this.value + " µm");
+  });
+
+d3.select("#angleValue")
+  .html(defaultAngle + "°");
+d3.select("#angle")
+  .attr("value", defaultAngle)
+  .on("input", function() {
+      angle = +this.value * Math.PI / 180;
+      var data = anodeFiltration(spec, depth, angle);
+      plot.update(data[0], "#line1");
+      DOs = getDOs(data[1]);
+      d3.select("#figure1")
+        .data([DOs])
+        .call(draw);
+      d3.select("#angleValue")
+        .html(this.value + "°");
+  });
+
+d3.select("#gammaValue")
+  .html(defaultGamma);
+d3.select("#gamma")
+  .attr("value", defaultGamma)
+  .on("input", function() {
+      gamma = +this.value;
+      var data = anodeFiltration(spec, depth, angle);
+      plot.update(data[0], "#line1");
+      DOs = getDOs(data[1], 3.0, gamma);
+      d3.select("#figure1")
+        .data([DOs])
+        .call(draw);
+      d3.select("#gammaValue")
+        .html(this.value);
+  });
+      </script>
+    </div>
+  </body>
+</html>
+
+

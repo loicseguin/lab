@@ -4,59 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Simulation d'une radiographie</title>
-    <style>
-      body {
-        color: #333;
-        font: 16px sans-serif;
-        margin: 0;
-        padding: 0;
-      }
-      
-      #informations {
-        background-color: #ddd;
-        width: 500px;
-        margin: 0;
-        padding: 0;
-        float: left;
-      }
-
-      #figures {
-        background-color: rgb(235, 235, 235);
-        width: 500px;
-        margin: 0;
-        padding: 0;
-        float: left;
-      }
-
-      .container {
-        margin: 0 auto;
-        width: 1040px;
-        padding: 0 20px;
-      }
-
-      .axis path,
-      .axis line {
-        fill: none;
-        stroke: #666;
-        shape-rendering: crispEdges;
-      }
-
-      .axis text {
-        fill: #333;
-      }
-
-      .line {
-        fill: none;
-        stroke: #ff7f0e;
-        stroke-width: 1.5px;
-      }
-
-      .grid path,
-      .grid line {
-        stroke: #fff;
-        opacity: 0.7;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
     <div class="container">
@@ -68,7 +16,110 @@
       </div>
       <script src="http://d3js.org/d3.v4.js"></script>
       <script src="plot.js"></script>
+      <script src="attenuationcoeff.js"></script>
+      <script src="filtration.js"></script>
       <script src="xray.js"></script>
+  <script>
+var tubePotential = [40, 55, 80, 100],
+    n0s = [200, 100, 50, 300];
+
+var datas = d3.zip(tubePotential, n0s)
+    .map(function(d) {
+        var photonEnergy = d3.range(0, d[0], 0.1);
+        return genSpectrum(photonEnergy, d[1]);
+    });
+
+var nplots = 0;
+var plot0 = lineChart()
+    .xAxisLabel("Énergie des photons (keV)")
+    .yAxisLabel("Nombre de photons");
+d3.select("#figures")
+    .append("div")
+    .attr("id", "figure0")
+    .data([datas[0]])
+    .call(plot0);
+nplots++;
+
+d3.select("#addplot").on("click", function() {
+    if (nplots < datas.length) {
+        d3.select("#figure0")
+            .data([datas[nplots]])
+            .call(plot0);
+        nplots++;
+        d3.select("#delplot").attr("disabled", null);
+    }
+    if (nplots >= datas.length) {
+        d3.select(this).attr("disabled", "disabled");
+    }
+});
+
+d3.select("#delplot")
+    .on("click", function() {
+        nplots--;
+        d3.select(".line#line" + nplots).remove()
+        d3.select("#addplot").attr("disabled", null);
+
+        if (nplots <= 0) {
+            d3.select(this).attr("disabled", "disabled");
+        }
+    });
+
+
+var photonEnergy = d3.range(0, 50, 0.1);
+var n0 = 50;
+var plot1 = lineChart()
+    .xAxisLabel("Énergie des photons (keV)")
+    .yAxisLabel("Nombre de photons")
+    .xdomain([0, 100])
+    .ydomain([0, 100]);
+d3.select("#figures")
+    .append("div")
+    .attr("id", "figure1")
+    .data([genSpectrum(photonEnergy, n0)])
+    .call(plot1);
+d3.select("#figure1")
+    .append("input")
+    .attr("type", "range")
+    .attr("min", 0)
+    .attr("max", 100)
+    .attr("id", "tubePotential")
+    .on("input", function() {
+        photonEnergy = d3.range(0, +this.value, 0.1);
+        data = genSpectrum(photonEnergy, n0);
+        plot1.update(data);
+    });
+d3.select("#figure1")
+    .append("input")
+    .attr("type", "range")
+    .attr("min", 0)
+    .attr("max", 100)
+    .attr("id", "n0")
+    .on("input", function() {
+        n0 = +this.value;
+        data = genSpectrum(photonEnergy, n0);
+        plot1.update(data);
+    });
+
+
+var plot = lineChart()
+  .xAxisLabel("Énergie des photons (keV)")
+  .yAxisLabel("Nombre de photons (x 10¹⁴)");
+var photonEnergy = d3.range(0, 80, 0.1);
+var spec = genSpectrum(photonEnergy, 1.5, 0.02, 0.01);
+var anodeFiltered = anodeFiltration(spec)[0];
+var allAlCoeffs = allAttenuationCoeffs(muAluminium, photonEnergy);
+var filtered = beerLambert(anodeFiltered, 1e-3, allAlCoeffs);
+d3.select("#figures")
+  .append("div")
+  .attr("id", "figure2")
+  .data([anodeFiltered])
+  .call(plot);
+d3.select("#figure2")
+  .data([filtered])
+  .call(plot);
+
+  </script>
+
     </div>
   </body>
 </html>

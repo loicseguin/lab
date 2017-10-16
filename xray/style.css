@@ -1,0 +1,86 @@
+body {
+    font: 400 16px/22px "Helvetica Neue", "Helvetica", Arial, sans-serif;
+    background-color: #fff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h4 {
+    text-align: center;
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+td, th {
+    padding: 0;
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #E1E1E1;
+}
+
+table tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+table tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+li {
+    margin: 10px 0;
+}
+
+#informations {
+    /*background-color: #ddd;*/
+    width: 480px;
+    margin: 0 10px 0 0;
+    padding: 10px;
+    float: left;
+}
+
+#figures {
+    /*background-color: rgb(235, 235, 235);*/
+    width: 500px;
+    margin: 0;
+    padding: 10px;
+    float: left;
+}
+
+.container {
+    margin: 0 auto;
+    width: 1040px;
+    padding: 0 20px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #666;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    fill: #333;
+    font-size: 12px;
+}
+
+.line {
+    fill: none;
+    stroke: #ff7f0e;
+    stroke-width: 1.5px;
+}
+
+.grid path,
+.grid line {
+    stroke: #efefef;
+    opacity: 0.7;
+}
+
+#controls span {
+    display: inline-block;
+    width: 60px;
+}

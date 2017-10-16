@@ -1,5 +1,5 @@
 function lineChart() {
-    var margin = {top: 20, right: 20, bottom: 40, left: 60},
+    var margin = {top: 10, right: 20, bottom: 40, left: 60},
         width = 500 - margin.left - margin.right,
         height = 300 - margin.top - margin.bottom,
         xScale = d3.scaleLinear(),
@@ -122,7 +122,7 @@ function lineChart() {
                 .append("text")
                 .attr("class", "x label")
                 .attr('x', width / 2)
-                .attr('y', 30)
+                .attr('y', 35)
                 .style('text-anchor', 'middle')
                 .text(function(d) { return d; });
 
@@ -139,7 +139,7 @@ function lineChart() {
                 .attr("class", "y label")
                 .attr("transform", "rotate(-90)")
                 .attr("x", -height/2)
-                .attr("y", -40)
+                .attr("y", -45)
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
                 .text(function(d) { return d; });
@@ -207,10 +207,13 @@ function lineChart() {
         return plot;
     };
 
-    plot.update = function(data) {
+    plot.update = function(data, lineid) {
         // Change data for a line. This function should only be used if the
         // chart contains a single line.
-        g.select(".line")
+        if (lineid === undefined) {
+            lineid = ".line";
+        }
+        g.select(lineid)
             .datum(data)
             .attr("d", d3.line()
                 .x(function(d) { return xScale(d[0]); })
@@ -236,4 +239,54 @@ function lineChart() {
     };
 
     return plot;
+}
+
+
+function greyscaleDrawing() {
+    var width = 500;
+        height = 80;
+
+    function draw(selection) {
+
+        selection.each(function(data) {
+
+            // Select the svg element if it exists.
+            var svg = d3.select(this).selectAll("svg").data([data]);
+            var svgEnter = svg.enter().append("svg");
+
+            // Update outer dimensions, ie, dimensions of the svg element.
+            svg = svg.merge(svgEnter);
+            svg.attr("width", width)
+                .attr("height", height);
+
+            var binwidth = width / data.length;
+
+            // Enter
+            svg.selectAll("rect")
+                .data(DOs)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) { return i * binwidth; })
+                .attr("y", 0)
+                .attr("width", binwidth)
+                .attr("height", height)
+                .attr("fill", function(d, i) {
+                    return "rgb(" + d + ", " + d + ", " + d + ")"; })
+                .attr("stroke", function(d, i) {
+                    return "rgb(" + d + ", " + d + ", " + d + ")"; });
+
+            // Update
+            svg.selectAll("rect")
+                .data(DOs)
+                .attr("x", function(d, i) { return i * binwidth; })
+                .attr("width", binwidth)
+                .attr("fill", function(d, i) {
+                    return "rgb(" + d + ", " + d + ", " + d + ")"; })
+                .attr("stroke", function(d, i) {
+                    return "rgb(" + d + ", " + d + ", " + d + ")"; });
+
+        });
+    }
+
+    return draw;
 }

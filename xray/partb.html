@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Simulation d'une radiographie – Partie B</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="informations">
+      <h1>Simulation d'une radiographie</h1>
+      <h2>Partie B</h2>
+      <p><a href="parta.html">« Partie A</a> <a href="partc.html">Partie C »</a>
+      <p>
+        Les 2 figures ci-contre montrent chacune trois spectres d'émission de
+        rayons X par l'anode. Dans les trois cas, le temps d'exposition est le
+        même.
+      </p>
+      <ol>
+        <li>Les six spectres illustrés sont une combinaison de deux types de
+          rayonnements. Nommez ces deux types de rayonnement. Aucune
+          justification requise.</li>
+        <li>On s’intéresse à l’effet de la différence de potentiel aux bornes
+          du tube à rayons X (Δ<em>V</em>) et du courant dans le filament
+          (<em>i</em><sub>filament</sub>) sur l’allure des spectres.
+          <ol>
+            <li>Pour les spectres 1, 2 et 3 (figure du haut), complétez le
+              tableau suivant. Dans la colonne du courant du filament, encadrez
+              la bonne réponse. Notez que <i>i</i><sub>filament</sub> est déjà
+              donné pour la courbe verte. Expliquez votre démarche à droite du
+              tableau en mentionnant clairement tous les liens entre les
+              paramètres du tableau et ceux lus sur la figure.
+              <table>
+                <tr>
+                  <th>Couleur de la courbe</th>
+                  <th>∆<em>V</em> (V)</th>
+                  <th><em>i</em><sub>filament</sub> (A)</th>
+                </tr>
+                <tr>
+                  <td>verte</td>
+                  <td></td>
+                  <td><del>1,00</del> <ins>2,00</ins> <del>3,00</del></td>
+                </tr>
+                <tr>
+                  <td>orange</td>
+                  <td></td>
+                  <td>1,00 2,00 3,00</td>
+                </tr>
+                <tr>
+                  <td>bleue</td>
+                  <td></td>
+                  <td>1,00 2,00 3,00</td>
+                </tr>
+              </table>
+            </li>
+            <li>Pour les spectres 4, 5 et 6 (figure du bas), complétez le
+              tableau suivant. Dans la colonne du courant du filament, encadrez
+              la bonne réponse. Notez que <i>i</i><sub>filament</sub> est déjà
+              donné pour la courbe orange. Comme votre démarche devrait être
+              similaire à celle de la question 5a), vous n’avez pas à
+              l’expliquer à nouveau.
+              <table>
+                <tr>
+                  <th>Couleur de la courbe</th>
+                  <th>∆<em>V</em> (V)</th>
+                  <th><em>i</em><sub>filament</sub> (A)</th>
+                </tr>
+                <tr>
+                  <td>verte</td>
+                  <td></td>
+                  <td>1,00 2,00 3,00</td>
+                </tr>
+                <tr>
+                  <td>orange</td>
+                  <td></td>
+                  <td><del>1,00</del> <ins>2,00</ins> <del>3,00</del></td>
+                </tr>
+                <tr>
+                  <td>bleue</td>
+                  <td></td>
+                  <td>1,00 2,00 3,00</td>
+                </tr>
+              </table>
+            </li>
+          </ol>
+        </li>
+      </ol>
+      </div>
+      <div id="figures">
+        <div id="figure1">
+          <h4>Spectres 1, 2 et 3</h4>
+        </div>
+        <div id="figure2">
+          <h4>Spectres 4, 5 et 6</h4>
+        </div>
+      </div>
+      <script src="http://d3js.org/d3.v4.min.js"></script>
+      <script src="plot.js"></script>
+      <script src="xray.js"></script>
+      <script>
+var tubePotential = [40, 60, 80, 60, 60, 60],
+  etot = [1, 1, 1, 1, 2, 3];
+
+var datas = d3.zip(tubePotential, etot)
+  .map(function(d) {
+    var photonEnergy = d3.range(0, d[0], 0.05);
+    return genSpectrum(photonEnergy, d[1], 0.02, 0.02);
+});
+
+var plot1 = lineChart()
+  .xAxisLabel("Énergie des photons (keV)")
+  .yAxisLabel("Nombre de photons (x 10¹⁴)");
+datas.slice(0, 3).map(function(d) {
+  d3.select("#figure1")
+    .data([d])
+    .call(plot1);
+});
+var plot2 = lineChart()
+  .xAxisLabel("Énergie des photons (keV)")
+  .yAxisLabel("Nombre de photons (x 10¹⁴)");
+datas.slice(3, 6).map(function(d) {
+  d3.select("#figure2")
+    .data([d])
+    .call(plot2);
+});
+      </script>
+    </div>
+  </body>
+</html>
+

@@ -1,3 +1,5 @@
+var electronChargeMantissa = 1.602 / 100;
+
 function normalPDF(x, mu, sigma) {
     // Evaluate the probability density function at `x` for a normal
     // distribution with mean `mu` and standard deviation `sigma`.
@@ -29,9 +31,9 @@ function characteristicSpectrum(photonEnergy) {
     var index = lineEnergy.findIndex(function (d) { return d > eMax; });
     if (index < 0) {
         // All lines are included.
-        index = photonEnergy.length - 1;
+        index = photonEnergy.length;
     } else {
-        index = index - 1;
+        index = index;
     }
 
     var norm = dE / d3.sum(relativeIntensity.slice(0, index));
@@ -72,13 +74,15 @@ function noiseSpectrum(photonEnergy, noiseSD) {
     return nbPhotons;
 }
 
-function genSpectrum(photonEnergy, n0, charStrength, noiseSD) {
-    // Compute a spectrum for the given photon energies. The number of photons
-    // at the origin, ie, with 0 energy, is `n0`. The importance of
-    // characteristic radiation relative to Bremsstrahlung radiation is
-    // `charStrength`. For instance, a value of 0.01 for `charStrength` means
-    // that the number of photons from characteristic radiation is 1% the
-    // number of photons from Bremsstrahlung radiation.
+function genSpectrum(photonEnergy, Etot, charStrength, noiseSD) {
+    // Compute a spectrum for the given photon energies. The total energy of
+    // the spectrum in **joules** is `Etot`.The proportion of characteristic
+    // radiation in the total radiation is `charStrength`. For
+    // instance, a value of 0.01 for `charStrength` means that the number of
+    // photons from characteristic radiation is 1% of the total and the
+    // remaining 99% is Bremsstrahlung radiation.
+    //
+    // The number of photons returned is divided by 1e14.
     if (n0 === undefined) { n0 = 100; }
     if (charStrength === undefined) { charStrength = 0.01; }
     if (noiseSD === undefined) { noiseSD = 1; }
@@ -86,9 +90,12 @@ function genSpectrum(photonEnergy, n0, charStrength, noiseSD) {
     var nbPhotons = bremsstrahlungSpectrum(photonEnergy);
     var charSpec = characteristicSpectrum(photonEnergy);
     var noise = noiseSpectrum(photonEnergy, noiseSD);
+    var eMax = photonEnergy[photonEnergy.length - 1];
+    var n0 = 2 * Etot / (eMax * electronChargeMantissa);
     var norm = n0 / nbPhotons[0];
+    var bremStrength = 1 - charStrength
     nbPhotons = nbPhotons.map(function(n, i) {
-        var n = norm * (n + charStrength * charSpec[i]) + noise[i];
+        var n = norm * (bremStrength * n + charStrength * charSpec[i]) + noise[i];
         return d3.max([0, n]);
     });
     return d3.zip(photonEnergy, nbPhotons);
@@ -144,86 +151,6 @@ function genSpectrum(photonEnergy, n0, charStrength, noiseSD) {
     //return d3.zip(photonEnergy, nbPhotons);
 //}
 
-
-var tubePotential = [40, 55, 80, 100],
-    n0s = [200, 100, 50, 300];
-
-var datas = d3.zip(tubePotential, n0s)
-    .map(function(d) {
-        var photonEnergy = d3.range(0, d[0], 0.1);
-        return genSpectrum(photonEnergy, d[1]);
-    });
-
-var nplots = 0;
-var plot0 = lineChart()
-    .xAxisLabel("Énergie des photons (keV)")
-    .yAxisLabel("Nombre de photons");
-d3.select("#figures")
-    .append("div")
-    .attr("id", "figure0")
-    .data([datas[0]])
-    .call(plot0);
-nplots++;
-
-d3.select("#addplot").on("click", function() {
-    if (nplots < datas.length) {
-        d3.select("#figure0")
-            .data([datas[nplots]])
-            .call(plot0);
-        nplots++;
-        d3.select("#delplot").attr("disabled", null);
-    }
-    if (nplots >= datas.length) {
-        d3.select(this).attr("disabled", "disabled");
-    }
-});
-
-d3.select("#delplot")
-    .on("click", function() {
-        nplots--;
-        d3.select(".line#line" + nplots).remove()
-        d3.select("#addplot").attr("disabled", null);
-
-        if (nplots <= 0) {
-            d3.select(this).attr("disabled", "disabled");
-        }
-    });
-
-
-var photonEnergy = d3.range(0, 50, 0.1);
-var n0 = 50;
-var plot1 = lineChart()
-    .xAxisLabel("Énergie des photons (keV)")
-    .yAxisLabel("Nombre de photons")
-    .xdomain([0, 100])
-    .ydomain([0, 100]);
-d3.select("#figures")
-    .append("div")
-    .attr("id", "figure1")
-    .data([genSpectrum(photonEnergy, n0)])
-    .call(plot1);
-d3.select("#figure1")
-    .append("input")
-    .attr("type", "range")
-    .attr("min", 0)
-    .attr("max", 100)
-    .attr("id", "tubePotential")
-    .on("input", function() {
-        photonEnergy = d3.range(0, +this.value, 0.1);
-        data = genSpectrum(photonEnergy, n0);
-        plot1.update(data);
-    });
-d3.select("#figure1")
-    .append("input")
-    .attr("type", "range")
-    .attr("min", 0)
-    .attr("max", 100)
-    .attr("id", "n0")
-    .on("input", function() {
-        n0 = +this.value;
-        data = genSpectrum(photonEnergy, n0);
-        plot1.update(data);
-    });
 
 
 // benchmark
