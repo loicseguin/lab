@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Niveau sonore transmis et réfléchi à une interface</title>
+    <style>
+        body {
+            color: #333;
+            font: 16px sans-serif;
+            margin: 0;
+        }
+        
+        .container {
+            margin: 0 auto;
+            width: 1070px;
+            padding: 0 20px;
+        }
+
+        .controls-left {
+            border-right: 2px solid #eee;
+            float: left;
+            margin: 10px 40px 30px;
+            padding: 0 55px 0 0;
+            width: 400px;
+        }
+
+        .controls-right {
+            float: left;
+            margin: 10px 20px 30px;
+            width: 400px;
+        }
+
+        input:invalid+span:after {
+          content: 'Vous devez entrer un nombre.';
+          padding-left: 10px;
+        }
+
+        td {
+          padding: 10px 20px 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <h3>Calculateur d'atténuation des ondes sonores</h3>
+        <div>
+          <p>
+            <label for="impedance1">Z<sub>1</sub></label>
+            <input class="textinput" id="impedance1" name="impedance1"
+              type="number" min="0" step="0.0001" value="1.5"
+              oninput="compute()" required>
+            <span class="units"> 10<sup>6</sup> kg/m<sup>2</sup>s</span>
+            <span class="validity"></span>
+          </p>
+          <p>
+            <label for="impedance2">Z<sub>2</sub></label>
+            <input class="textinput" id="impedance2" name="impedance2"
+              type="number" min="0" step="0.0001" value="1.64"
+              oninput="compute()" required>
+            <span class="units"> 10<sup>6</sup> kg/m<sup>2</sup>s</span>
+            <span class="validity"></span>
+          </p>
+        </div>
+
+        <div>
+          <table>
+            <tr>
+              <td>Probabilité de réflexion :</td>
+              <td><em>p<sub>r</sub></em> = <span id="pr"></span></td>
+            </tr>
+            <tr>
+              <td>Probabilité de transmission : </td>
+              <td><em>p<sub>t</sub></em> = <span id="pt"></span></td>
+            </tr>
+            <tr>
+              <td>Niveau sonore de réflexion : </td>
+              <td><em>&beta;<sub>r</sub></em> = <span id="betar"></span> dB</td>
+            </tr>
+            <tr>
+              <td>Niveau sonore de transmission : </td>
+              <td><em>&beta;<sub>t</sub></em> = <span id="betat"></span> dB</td>
+            </tr>
+          </table>
+        </div>
+
+    </div>
+
+    <script src="echo.js"></script>
+</body>
