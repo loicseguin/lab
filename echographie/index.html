@@ -82,6 +82,35 @@
           </table>
         </div>
 
+        <hr/>
+      <h3>Calculateur de réfraction</h3>
+        <div>
+          <p>
+            <label for="speed1">v<sub>1</sub></label>
+            <input class="textinput" id="speed1" name="speed1"
+              type="number" min="0" step="0.0001" value="1.5"
+              oninput="computeRefraction()" required>
+            <span class="units"> m/s</span>
+            <span class="validity"></span>
+          </p>
+          <p>
+            <label for="speed2">v<sub>2</sub></label>
+            <input class="textinput" id="speed2" name="speed2"
+              type="number" min="0" step="0.0001" value="1.64"
+              oninput="computeRefraction()" required>
+            <span class="units"> m/s</span>
+            <span class="validity"></span>
+          </p>
+        </div>
+
+        <div>
+          <table>
+            <tr>
+              <td>Probabilité de réflexion :</td>
+              <td><em>p<sub>r</sub></em> = <span id="pr"></span></td>
+            </tr>
+          </table>
+        </div>
     </div>
 
     <script src="echo.js"></script>
