@@ -13,13 +13,11 @@ function diffraction_envelope(y, lambda, a, L) {
     // L: float
     //    Distance between slits and screen
     //
-    var intensity = 0
+    var intensity = 1;
     var x = Math.PI * a * y / (lambda * L);
 
     if (x != 0) {
         intensity = Math.pow(Math.sin(x) / x, 2);
-    } else {
-        intensity = 1
     }
     return intensity;
 }
@@ -45,7 +43,13 @@ function relative_intensity(y, lambda, a, d, n, L) {
     //
     var x = Math.PI * a * y / (lambda * L);
     var z = Math.PI * y * d / (lambda * L);
-    var intensity = Math.pow(Math.sin(x) / x * Math.sin(n * z) / Math.sin(z), 2);
+    var sinx_over_x = 1;
+
+    if (x != 0) {
+        sinx_over_x = Math.sin(x) / x;
+    }
+
+    var intensity = Math.pow(sinx_over_x * Math.sin(n * z) / Math.sin(z), 2);
     return intensity;
 }
 
