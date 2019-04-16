@@ -8,7 +8,7 @@
             font: 16px sans-serif;
             margin: 0;
         }
-        
+
         .container {
             margin: 0 auto;
             width: 1070px;
@@ -65,7 +65,7 @@
                     Longueur d'onde
                 </span>
                 <input class="slider" id="wavelengthSlider" type="range"
-                    min="450" max="700" step="10" value="650" 
+                    min="300" max="800" step="5" value="650"
                     oninput="wavelengthChanged()" />
                 <span class="slider"><span id="wavelength">650</span> nm</span>
             </p>
@@ -74,7 +74,7 @@
                     Largeur des fentes
                 </span>
                 <input class="slider" id="slitWidthSlider" type="range"
-                    min="10" max="500" step="10" value="50" 
+                    min="0" max="500" step="1" value="50"
                     oninput="widthChanged()" />
                 <span class="slider"><span id="slitwidth">50</span> μm</span>
             </p>
@@ -95,7 +95,7 @@
                     Nombre de fentes
                 </span>
                 <input class="slider" id="numberSlitsSlider" type="range"
-                    min="1" max="6" step="1" value="2" 
+                    min="1" max="6" step="1" value="2"
                     oninput="numberSlitsChanged()" />
                 <span class="slider"><span id="numberslits">2</span></span>
             </p>
