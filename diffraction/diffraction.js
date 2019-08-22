@@ -13,8 +13,12 @@ function diffraction_envelope(y, lambda, a, L) {
     // L: float
     //    Distance between slits and screen
     //
+    var intensity = 1;
     var x = Math.PI * a * y / (lambda * L);
-    var intensity = Math.pow(Math.sin(x) / x, 2);
+
+    if (x != 0) {
+        intensity = Math.pow(Math.sin(x) / x, 2);
+    }
     return intensity;
 }
 
@@ -39,7 +43,13 @@ function relative_intensity(y, lambda, a, d, n, L) {
     //
     var x = Math.PI * a * y / (lambda * L);
     var z = Math.PI * y * d / (lambda * L);
-    var intensity = Math.pow(Math.sin(x) / x * Math.sin(n * z) / Math.sin(z), 2);
+    var sinx_over_x = 1;
+
+    if (x != 0) {
+        sinx_over_x = Math.sin(x) / x;
+    }
+
+    var intensity = Math.pow(sinx_over_x * Math.sin(n * z) / Math.sin(z), 2);
     return intensity;
 }
 
@@ -75,7 +85,7 @@ function linspace(a, b, n) {
 
 function setup_plot_area() {
     // Create a default set of axis and set margins and sizes properly.
-    
+
     // The xscale maps values in the domain to values in the range. Values in
     // the domain are distances along the screen whereas values in the range
     // are pixels in the SVG figure.
@@ -103,7 +113,7 @@ function setup_plot_area() {
         .scale(yscale)
         .ticks(0)
         .orient("left");
-    
+
     // Create a svg figure with the proper sizes and margins.
     var svg = d3.select("#viscontainer").append("svg")
         .attr("width", 1030)
@@ -223,7 +233,7 @@ function widthChanged() {
         d = params[2],
         n = params[3],
         L = params[4];
-    
+
     if (a >= d) {
         if (d < 1000) {
             d = a + 10;
@@ -247,7 +257,7 @@ function distanceChanged() {
         d = params[2],
         n = params[3],
         L = params[4];
-    
+
     if (d <= a) {
         if (a > 10) {
             a = d - 10;
@@ -271,7 +281,7 @@ function wavelengthChanged() {
         d = params[2],
         n = params[3],
         L = params[4];
-    
+
     document.getElementById("wavelength").innerHTML = lambda * 1000.0;
     plot_diffraction(ymin, ymax, lambda, a, d, n, L);
 }
@@ -284,7 +294,7 @@ function numberSlitsChanged() {
         d = params[2],
         n = params[3],
         L = params[4];
-    
+
     document.getElementById("numberslits").innerHTML = n;
     plot_diffraction(ymin, ymax, lambda, a, d, n, L);
 }
