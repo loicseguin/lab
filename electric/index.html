@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+  <script src="sketch.js"></script>
+  <style>
+      body {
+          color: #333;
+          font: 16px sans-serif;
+          margin: 0;
+          padding: 0;
+      }
+
+      p {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      #num_elements_info {
+          margin: 10px 20px 30px;
+          padding: 0 10px 0 0;
+          width: 200px;
+      }
+  </style>
+</head>
+<body>
+  <p>
+    <span id="num_elements_info">
+      Nombre d'éléments de charge
+    </span>
+      <input class="slider" id="num_elements_slider" type="range"
+        min="2" max="50" step="1" value="20"
+        oninput="numElementsChanged()" />
+      <span id="num_elements">20</span>
+  </p>
+</body>
+</html>
